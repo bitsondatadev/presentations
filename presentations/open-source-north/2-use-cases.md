@@ -38,14 +38,5 @@
 
 ## Case 3: Fast object storage analytics
 
-* Object storage is cheap, distributed, and commonly used to store open
-  filetypes such as ORC, Parquet, JSON, and CSV files
-* Data lake is the common term for storing data in unstructured formats
-* Earlier data lakes were slow due to runtime, ineffecient data representation,
-  and lack of accessibility
-* New technologies improved upon the speed and discoverability of data such as
-  Iceberg, Amundsen, and Trino
-* Trino enabled adhoc queries over large data lakes with petabytes of data
-* Data Lakehouse is a Data Lake including scheduled performance maintenance,
-  data governance, and improved data cataloging
+![](./images/datalake.gif) <!-- .element width="80%" -->
 

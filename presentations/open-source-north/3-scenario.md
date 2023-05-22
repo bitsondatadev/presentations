@@ -16,6 +16,7 @@
 
 ```sql
 SELECT
+  p.number,
   p.name, 
   AVG(s.lat) AS avg_lat, 
   AVG(s.long) AS avg_long
@@ -23,7 +24,7 @@ FROM mongo.pokemon.pokedex AS p
   JOIN postgres.pokemon.spawns AS s 
     ON p.number = s.num
 WHERE p.type_1 = 'Electric'
-GROUP BY p.name;
+GROUP BY p.number, p.name;
 ```
 <!-- .element class="fragment" -->
 
@@ -55,7 +56,7 @@ CREATE TABLE iceberg.pokemon.electric_spawns(
 ```sql
 MERGE INTO iceberg.pokemon.electric_spawns t USING (
   SELECT
-    number,
+    p.number,
     p.name,
     AVG(s.lat) AS avg_lat,
     AVG(s.long) AS avg_long
@@ -66,10 +67,10 @@ MERGE INTO iceberg.pokemon.electric_spawns t USING (
   GROUP BY p.number, p.name 
 ) AS s ON (s.name = t.name)
 WHEN MATCHED
-  THEN UPDATE SET lat = s.lat, long = s.long
+  THEN UPDATE SET avg_lat = s.avg_lat, avg_long = s.avg_long
 WHEN NOT MATCHED
-  THEN INSERT (number, name, lat, long)
-        VALUES (s.number, s.name, s.lat, s.long);
+  THEN INSERT (number, name, avg_lat, avg_long)
+        VALUES (s.number, s.name, s.avg_lat, s.avg_long);
 ```
 
 -vertical
@@ -78,11 +79,11 @@ WHEN NOT MATCHED
 
 ```sql
 SELECT 
+  number,
   name, 
-  AVG(s.lat) AS avg_lat, 
-  AVG(s.long) AS avg_long
-FROM electric_spawns
-GROUP BY p.name;
+  avg_lat, 
+  avg_long
+FROM electric_spawns;
 ```
 
 -vertical
@@ -133,4 +134,22 @@ MERGE INTO iceberg.pokemon.spawns t USING
 WHEN NOT MATCHED
   THEN INSERT (id, num, name, lat, long, encounter_ms, disappear_ms)
         VALUES (s.id, s.num, s.name, s.lat, s.long, s.encounter_ms, s.disappear_ms);
+```
+-vertical
+
+## Querying the data lakehouse
+
+### Avoiding strain on production
+
+```sql
+SELECT
+  p.number
+  p.name, 
+  AVG(lat) AS avg_lat, 
+  AVG(long) AS avg_long
+FROM iceberg.pokemon.pokedex AS p
+  JOIN iceberg.pokemon.spawns AS s 
+    ON p.number = s.num
+WHERE p.type_1 = 'Electric'
+GROUP BY p.number, p.name;
 ```
