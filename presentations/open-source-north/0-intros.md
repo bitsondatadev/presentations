@@ -47,9 +47,9 @@ FROM the.dadabase;
 
 <!-- .element style="float: left;  width: 40%;" -->
 
-Why did the data engineer leave their partner?
+Why did the data engineer bring a ladder to the office?
 
-They found out it was a one-to-many relationship.
+They heard data was stored in the cloud!
 <!-- .element class="fragment" -->
 
 <!-- .element class="r-fit-text" -->
