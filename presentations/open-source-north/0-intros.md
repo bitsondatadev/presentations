@@ -36,9 +36,10 @@ FROM the.dadabase;
 <div style="float: left; width: 60%; text-align: left; font-size:36px;" >
   <ul>
     <li>father of two</li>
-    <li>ex-Amazon, es-Best By, ex-Optum</li>
-    <li>based in the twin cities</li>
+    <li>Senior SDE @ Starburst Data; ex-Amazon, Best Buy and Optum</li>
+    <li>based in the Twin Cities since 2006</li>
     <li>first OSN as a speaker, third OSN total</li>
+    <li>hobbies: camping, tennis, reading, but mostly dad stuff</li>
   </ul>
 </div>
 
