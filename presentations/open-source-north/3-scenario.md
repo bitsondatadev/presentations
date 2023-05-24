@@ -8,7 +8,7 @@
   <li>Two datasets: Pok&eacute;mon pokedex and Pok&eacute;mon Go spawn data</li>
   <li>Pok&eacute;mon pokedex data is stored in MongoDB</li>
   <li>Pok&eacute;mon Go spawn data is stored in Postgres</li>
-  <li>Find the central point of all Pok&eacute;mon of an electric type.</li>
+  <li>Find the central point of all Pok&eacute;mon of Ice type.</li>
   <!-- .element class="fragment" -->
   <li>What are some approaches to answer this query without using federation?</li>
   <!-- .element class="fragment" -->
@@ -23,7 +23,7 @@ SELECT
 FROM mongo.pokemon.pokedex AS p
   JOIN postgres.pokemon.spawns AS s 
     ON p.number = s.num
-WHERE p.type_1 = 'Electric'
+WHERE p.type_1 = 'Ice'
 GROUP BY p.number, p.name;
 ```
 <!-- .element class="fragment" -->
@@ -41,7 +41,7 @@ What if you want to do this on regularly incoming data?
 ## Saving and updating your results 
 
 ```sql
-CREATE TABLE iceberg.pokemon.electric_spawns(
+CREATE TABLE iceberg.pokemon.ice_spawns(
     number integer,
     name varchar,
     avg_lat double,
@@ -54,7 +54,7 @@ CREATE TABLE iceberg.pokemon.electric_spawns(
 ## Saving and updating your results 
 
 ```sql
-MERGE INTO iceberg.pokemon.electric_spawns t USING (
+MERGE INTO iceberg.pokemon.ice_spawns t USING (
   SELECT
     p.number,
     p.name,
@@ -63,7 +63,7 @@ MERGE INTO iceberg.pokemon.electric_spawns t USING (
   FROM mongo.pokemon.pokedex AS p
     JOIN postgres.pokemon.spawns AS s
       ON p.number = s.num
-  WHERE p.type_1 = 'Electric'
+  WHERE p.type_1 = 'Ice'
   GROUP BY p.number, p.name 
 ) AS s ON (s.name = t.name)
 WHEN MATCHED
@@ -83,7 +83,7 @@ SELECT
   name, 
   avg_lat, 
   avg_long
-FROM electric_spawns;
+FROM iceberg.pokemon.ice_spawns;
 ```
 
 -vertical
@@ -150,6 +150,6 @@ SELECT
 FROM iceberg.pokemon.pokedex AS p
   JOIN iceberg.pokemon.spawns AS s 
     ON p.number = s.num
-WHERE p.type_1 = 'Electric'
+WHERE p.type_1 = 'Ice'
 GROUP BY p.number, p.name;
 ```
